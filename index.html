@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Bebe ❄️💗</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        
+        .bg-gradient-anim {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(-45deg, #ff9a9e, #fad0c4, #a1c4fd, #c2e9fb);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .script-font {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        #loader {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            background: #fff0f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease-out;
+        }
+        
+        .heart-loader {
+            width: 60px;
+            height: 60px;
+            background: #ffb7b2;
+            position: relative;
+            transform: rotate(45deg);
+            animation: heartPulse 1.2s infinite;
+        }
+        .heart-loader::before,
+        .heart-loader::after {
+            content: "";
+            width: 60px;
+            height: 60px;
+            background: #ffb7b2;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .heart-loader::before { left: -30px; }
+        .heart-loader::after { top: -30px; }
+
+        @keyframes heartPulse {
+            0% { transform: rotate(45deg) scale(0.8); }
+            50% { transform: rotate(45deg) scale(1.0); }
+            100% { transform: rotate(45deg) scale(0.8); }
+        }
+
+        .ice-card {
+            background: linear-gradient(
+                135deg, 
+                rgba(255, 255, 255, 0.5) 0%, 
+                rgba(255, 255, 255, 0.2) 100%
+            );
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            position: absolute;
+            width: 100%;
+            max-width: 340px;
+            height: 480px;
+            border-radius: 2rem;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .floater {
+            position: absolute;
+            bottom: -10vh;
+            animation: floatUp linear forwards;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.7;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        .gift-shake { animation: giftShake 0.5s both; }
+        @keyframes giftShake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        .gift-bounce { animation: giftBounce 2s infinite; }
+        @keyframes giftBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .card-exit-left { transform: translateX(-150%) rotate(-25deg) !important; opacity: 0 !important; pointer-events: none; }
+        .card-exit-right { transform: translateX(150%) rotate(25deg) !important; opacity: 0 !important; pointer-events: none; }
+
+        .hidden-layout { display: none !important; }
+        .fade-in { animation: fadeIn 1s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="h-screen w-screen flex flex-col items-center justify-center relative select-none text-gray-800">
+
+    <div id="loader">
+        <div class="heart-loader mb-8"></div>
+        <p class="text-rose-400 font-bold text-lg tracking-widest animate-pulse mt-8">LOADING? NAH JUST LOVING <b>YOU😘</b>...</p>
+    </div>
+
+    <div class="bg-gradient-anim"></div>
+    <div id="background-floaters" class="fixed inset-0 pointer-events-none overflow-hidden"></div>
+
+    <!-- STAGE 1: THE GIFT -->
+    <div id="gift-stage" class="z-20 flex flex-col items-center justify-center text-center p-6 transition-all duration-1000 hidden-layout">
+        <div class="relative group cursor-pointer" id="gift-box">
+            <div class="gift-bounce transition-transform duration-200" id="gift-visual">
+                <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-8 bg-black/20 blur-xl rounded-[100%]"></div>
+                <svg width="220" height="220" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg" class="drop-shadow-2xl">
+                    <rect x="25" y="80" width="150" height="110" rx="8" fill="#F43F5E" />
+                    <rect x="85" y="80" width="30" height="110" fill="#FCD34D" />
+                    <rect x="15" y="60" width="170" height="40" rx="4" fill="#E11D48" />
+                    <rect x="85" y="60" width="30" height="40" fill="#FCD34D" />
+                    <path d="M100 65C100 65 80 20 50 40C20 60 50 80 100 65Z" fill="#FCD34D" stroke="#B45309" stroke-width="1"/>
+                    <path d="M100 65C100 65 120 20 150 40C180 60 150 80 100 65Z" fill="#FCD34D" stroke="#B45309" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-40 animate-bounce z-30">
+                <div class="bg-white/90 backdrop-blur text-rose-500 px-4 py-2 rounded-full shadow-lg font-bold text-sm border border-rose-100">
+                    ✨ For You
+                </div>
+            </div>
+        </div>
+        <h2 id="tap-instruction" class="mt-12 text-white font-extrabold text-3xl drop-shadow-lg script-font tracking-wide" style="font-size: 3rem;">
+            A Gift For My Bebe
+        </h2>
+        <div class="mt-2 text-white text-sm font-bold tracking-widest uppercase opacity-90">
+            (Tap the box 5 times)
+        </div>
+    </div>
+
+    <!-- STAGE 2: THE FROSTED CARDS -->
+    <div id="card-stage" class="hidden-layout w-full max-w-md h-[600px] relative flex items-center justify-center z-20 px-6">
+        
+        <!-- Proposals (Bottom) -->
+        <div id="card-10" class="ice-card scale-90 opacity-100" style="z-index: 1;">
+            <div class="mb-4">
+                <div class="text-6xl mb-4 animate-bounce">💍</div>
+                <h2 class="script-font text-5xl text-rose-600 mb-2">Will You?</h2>
+                <p class="text-slate-700 font-semibold">Make me the happiest person alive?</p>
+            </div>
+            <div class="w-full space-y-3 mt-4">
+                <button id="yes-btn" class="w-full bg-gradient-to-r from-rose-400 to-pink-500 text-white font-bold py-4 rounded-2xl shadow-lg transform transition hover:scale-105 active:scale-95 text-xl">
+                    YES! 😍
+                </button>
+                <button id="no-btn" class="w-full bg-white/50 border border-white text-slate-500 font-bold py-3 rounded-2xl transition-all duration-300 text-sm">
+                    No
+                </button>
+            </div>
+        </div>
+
+        <!-- Middle Cards -->
+        <div id="card-9" class="ice-card cursor-pointer" style="z-index: 2;" onclick="nextCard(9)">
+            <div class="text-6xl mb-6">🔁💗</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">My Constant</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"Years change. Markets change too. But you’re my <b>only constant</b> 😉"</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <div id="card-8" class="ice-card cursor-pointer" style="z-index: 3;" onclick="nextCard(8)">
+            <div class="text-6xl mb-6">💗✨</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">No Calculation</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"I won’t calculate your market value, because I never want to let you go <b>at any cost.</b>"</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <div id="card-7" class="ice-card cursor-pointer" style="z-index: 4;" onclick="nextCard(7)">
+            <div class="text-6xl mb-6">🧾💞</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">One Request</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"Entries in your notebook are temporary… But can I be a <b>permanent entry in your heart?</b> 🥺💗"</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <div id="card-6" class="ice-card cursor-pointer" style="z-index: 5;" onclick="nextCard(6)">
+            <div class="text-6xl mb-6">🚀💖</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">Worth the Risk</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"If loving you is a <b>high risk, high return investment</b>, I’m all okay for it. Always."</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <div id="card-5" class="ice-card cursor-pointer" style="z-index: 6;" onclick="nextCard(5)">
+            <div class="text-6xl mb-6">📑💗</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">Perfect Match</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"Balance sheets may not always match, but <b>humari jodi</b> will definitely match 💗"</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <div id="card-3" class="ice-card cursor-pointer" style="z-index: 7;" onclick="nextCard(3)">
+            <div class="text-6xl mb-6">📈</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">Best Investment</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"You are the best investment of <b>my love, my time, and all my feelings</b>. High returns are guaranteed(mhm😶‍🌫️)."</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <div id="card-2" class="ice-card cursor-pointer" style="z-index: 8;" onclick="nextCard(2)">
+            <div class="text-6xl mb-6">😶‍🌫️</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">Better than Bitcoin</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"You are the best thing that ever, <b>EVER happened </b> to me."</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to continue ➜</p>
+        </div>
+
+        <!-- Top Card -->
+        <div id="card-1" class="ice-card cursor-pointer" style="z-index: 9;" onclick="nextCard(1)">
+            <div class="text-6xl mb-6">💌</div>
+            <h3 class="text-3xl font-bold text-slate-800 mb-4 script-font">Hi Bebe</h3>
+            <p class="text-lg text-slate-700 leading-relaxed font-medium">"Tumne to de diye the mujhe <b>physical</b> cards, but mai nahi de sakta, isiliye tumhare liye kuch <b>digital</b> cards😘"</p>
+            <p class="mt-auto text-rose-500 text-xs font-extrabold uppercase tracking-widest animate-pulse">Tap to start ➜</p>
+        </div>
+    </div>
+
+    <!-- STAGE 3: SUCCESS -->
+    <div id="success-overlay" class="hidden-layout fixed inset-0 z-50 flex flex-col items-center justify-center text-center p-6 bg-white/30 backdrop-blur-xl fade-in">
+        <div class="ice-card relative !static transform-none shadow-2xl p-12">
+            <h1 class="script-font text-6xl text-rose-600 mb-4">She Said YES!</h1>
+            <p class="text-xl text-slate-800 font-bold mb-8">I love you so much! 💗✨️</p>
+            <div class="text-8xl animate-pulse">✨️💗</div>
+            <div class="mt-8 text-sm text-slate-500 font-semibold">Screenshot this and send it to me! 📸</div>
+        </div>
+    </div>
+
+    <script>
+        // Loading
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loader').style.display = 'none';
+                    document.getElementById('gift-stage').classList.remove('hidden-layout');
+                }, 800);
+            }, 1500);
+        });
+
+        // Background
+        const icons = ['🌹', '💗', '✨', '💖', '❄️', '🌸'];
+        function createFloater() {
+            const el = document.createElement('div');
+            el.classList.add('floater');
+            el.innerText = icons[Math.floor(Math.random() * icons.length)];
+            el.style.left = Math.random() * 100 + 'vw';
+            el.style.fontSize = (Math.random() * 20 + 20) + 'px';
+            const dur = Math.random() * 10 + 10;
+            el.style.animationDuration = dur + 's';
+            document.getElementById('background-floaters').appendChild(el);
+            setTimeout(() => el.remove(), dur * 1000);
+        }
+        setInterval(createFloater, 600);
+
+        // Gift
+        let taps = 0;
+        document.getElementById('gift-box').addEventListener('click', () => {
+            taps++;
+            const v = document.getElementById('gift-visual');
+            v.classList.remove('gift-bounce', 'gift-shake');
+            void v.offsetWidth;
+            v.classList.add('gift-shake');
+            
+            if (taps >= 5) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+                document.getElementById('gift-stage').style.opacity = "0";
+                setTimeout(() => {
+                    document.getElementById('gift-stage').classList.add('hidden-layout');
+                    document.getElementById('card-stage').classList.remove('hidden-layout');
+                }, 600);
+            }
+        });
+
+        // Cards Logic
+        function nextCard(num) {
+            const card = document.getElementById(`card-${num}`);
+            card.classList.add(Math.random() > 0.5 ? 'card-exit-left' : 'card-exit-right');
+            
+            // If we just swiped card 9, show the proposal card (10)
+            if (num === 9) {
+                const p = document.getElementById('card-10');
+                p.style.opacity = "1";
+                p.style.transform = "scale(1)";
+            }
+        }
+
+        // Buttons
+        const noBtn = document.getElementById('no-btn');
+        noBtn.addEventListener('mouseover', () => {
+            const x = (Math.random() - 0.5) * 200;
+            const y = (Math.random() - 0.5) * 200;
+            noBtn.style.transform = `translate(${x}px, ${y}px)`;
+            noBtn.innerText = "Are you sure? 🥺";
+        });
+
+        document.getElementById('yes-btn').addEventListener('click', () => {
+            confetti({ particleCount: 200, spread: 100 });
+            document.getElementById('card-stage').classList.add('hidden-layout');
+            document.getElementById('success-overlay').classList.remove('hidden-layout');
+        });
+    </script>
+</body>
+</html>
